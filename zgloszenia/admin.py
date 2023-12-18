@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from zgloszenia.models import Report, CustomUser
+
+admin.site.register(Report)
+admin.site.register(CustomUser)
