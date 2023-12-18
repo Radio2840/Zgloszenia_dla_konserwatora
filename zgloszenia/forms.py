@@ -11,9 +11,9 @@ class LoginForm(forms.Form):
 class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
-        fields = ['tytul', 'opis', 'zdjecie', 'stan_zgloszenia', 'waga_zgloszenia']
+        fields = ['title', 'description', 'foto', 'importance_of_the_report']
 
     def __init__(self, *args, **kwargs):
         super(ReportForm, self).__init__(*args, **kwargs)
-        self.fields['waga_zgloszenia'].widget = forms.Select(choices=Report.IMPORTANCE_CHOICES)
+        self.fields['importance_of_the_report'].widget = forms.Select(choices=Report.IMPORTANCE_CHOICES)
 
