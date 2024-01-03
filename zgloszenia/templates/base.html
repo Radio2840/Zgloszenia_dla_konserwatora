@@ -10,11 +10,21 @@
 </head>
 <body>
     <header>
-        <h1>Witaj!</h1>
+        {% if request.user.is_authenticated %}
+            <h1>Witaj!</h1>
+            <form method="post" action="{% url 'logoutme' %}">
+            {% csrf_token %}
+            <button type="submit">Wyloguj</button>
+            </form>
+        {% else %}
+        <a href="{% url 'login' %}">Zaloguj się do panelu</a>
+        {% endif %}
     </header>
     <div class="container">
+        {% if request.user.is_authenticated %}
             {% block content %}
             {% endblock %}
+        {% endif %}
     </div>
     <footer>
         <p>twórcy: Kinga Smolarek, Przemek Błasiak, Marcel nic nie robiący Mikulski</p>

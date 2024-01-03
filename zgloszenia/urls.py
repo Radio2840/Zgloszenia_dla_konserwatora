@@ -1,10 +1,10 @@
 from django.urls import path
 
-from konserwator.views import login_view, home_view
-from zgloszenia.views import add_report
+from zgloszenia.views import home_view, create_report, user_login, logoutme
 
 urlpatterns = [
-    path('addreport/', add_report, name='addreport'),
-    path('login/', login_view, name='login'),
-    path('home/', home_view, name="home"),
+    path('addreport/', create_report, name='addreport'),
+    path('home/', home_view, name='home'),
+    path('login/', user_login, name='login'),
+    path('logoutme', logoutme, name="logoutme"),
 ]
