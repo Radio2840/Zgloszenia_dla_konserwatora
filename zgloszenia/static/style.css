@@ -1,0 +1,9 @@
+body{
+    background-color: rgb(51, 53, 58);
+    color: #ccc;
+    height: 100vh;
+}
+.navbar{
+    padding: 10px;
+}
+
