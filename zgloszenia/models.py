@@ -1,40 +1,5 @@
-from django.contrib.auth.models import AbstractUser
+
 from django.db import models
-
-
-class CustomUser(AbstractUser):
-    MAX_POINTS = 10
-
-    ROLE_CHOICES = [
-        ('conservator', 'Konserwator'),
-        ('school_employee', 'Pracownik Szkoły'),
-    ]
-
-    points = models.PositiveIntegerField(default=MAX_POINTS)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, blank=False, null=False)
-    reports = models.ManyToManyField('Report', related_name='autor', blank=True)
-
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='customuser_groups',
-        blank=True,
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
-        verbose_name='groups',
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='customuser_permissions',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        verbose_name='user permissions',
-    )
-
-    def reset_points(self):
-        self.points = self.MAX_POINTS
-        self.save()
-
-    def __str__(self):
-        return self.username
 
 
 class Report(models.Model):
@@ -54,7 +19,6 @@ class Report(models.Model):
     foto = models.ImageField(upload_to='fotos/', null=True, blank=True)
     status_of_the_report = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_done')
     importance_of_the_report = models.IntegerField(choices=IMPORTANCE_CHOICES, default=1)
-    notifier = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='zgloszajacy')
 
     def __str__(self):
         return self.title

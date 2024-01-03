@@ -1,19 +1,22 @@
 from django import forms
-
-from zgloszenia.models import Report
+from .models import Report
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(label='login', max_length=100)
-    password = forms.CharField(label='password', widget=forms.PasswordInput)
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
 
 
 class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
-        fields = ['title', 'description', 'foto', 'importance_of_the_report']
+        fields = ['title', 'description', 'foto', 'status_of_the_report', 'importance_of_the_report']
 
-    def __init__(self, *args, **kwargs):
-        super(ReportForm, self).__init__(*args, **kwargs)
-        self.fields['importance_of_the_report'].widget = forms.Select(choices=Report.IMPORTANCE_CHOICES)
+    title = forms.CharField(label='Tytuł', max_length=150, required=True)
+    description = forms.CharField(label='Opis', widget=forms.Textarea(attrs={'rows': 3}), max_length=250,
+                                  required=True)
+    foto = forms.ImageField(label='Zdjęcie', required=False)
+    importance_of_the_report = forms.ChoiceField(label='Ważność', choices=Report.IMPORTANCE_CHOICES, initial=1,
+                                                 widget=forms.Select(attrs={'class': 'form-control'}))
+
 
