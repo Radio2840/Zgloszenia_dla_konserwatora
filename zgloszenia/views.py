@@ -2,8 +2,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-
 from zgloszenia.forms import ReportForm, LoginForm
+from zgloszenia.models import Report
 
 
 def user_login(request):
@@ -40,6 +40,18 @@ def create_report(request):
         form = ReportForm()
 
     return render(request, 'addreport.html', {'form': form})
+
+
+@login_required
+def not_done_reports(request):
+    not_done_reports = Report.objects.filter(status_of_the_report='not_done')
+    not_done_reports = not_done_reports.order_by('-importance_of_the_report')
+    in_progres_reports = Report.objects.filter(status_of_the_report='in_progress')
+    in_progres_reports = in_progres_reports.order_by('-importance_of_the_report')
+    done_reports = Report.objects.filter(status_of_the_report='done')
+    done_reports = done_reports.order_by('-importance_of_the_report')
+    context = {'not_done_reports': not_done_reports, 'in_progress_reports': in_progres_reports, 'done_reports':done_reports}
+    return render(request, 'konserwator/home.html', context)
 
 
 @login_required

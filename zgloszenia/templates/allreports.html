@@ -1,9 +1,7 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
+{% block title %} Widok wszystkich zgłoszeń {% endblock %}
 {% block content %}
-  <h2>Strona główna</h2>
-  {% if user.is_authenticated %}
-      <h2>Do zrobienia</h2>
+    <h2>Do zrobienia</h2>
     <ul>
         {% for report in not_done_reports %}
             <li>{{ report.title }} - {{ report.status_of_the_report }} - {{ report.importance_of_the_report }}</li>
@@ -29,5 +27,5 @@
             <p>Nie ma żadnych zgłoszeń</p>
         {% endfor %}
     </ul>
-  {% endif %}
 {% endblock %}
+
