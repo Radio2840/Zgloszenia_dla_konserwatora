@@ -11,21 +11,17 @@
 </head>
 <body class="d-flex flex-column h-100">
     <header class="navbar bg-dark">
+        <h1>Konserwa.tor</h1>
         {% if request.user.is_authenticated %}
-            <h1>Konserwa.tor</h1>
-            <form method="post" action="{% url 'logoutme' %}">
-            {% csrf_token %}
-            <button class="btn btn-outline-danger type="submit">Wyloguj</button>
-            </form>
-        {% else %}
-        <a href="{% url 'login' %}">Zaloguj się do panelu</a>
+        <form method="post" action="{% url 'logoutme' %}">
+        {% csrf_token %}
+        <button class="btn btn-outline-danger type="submit">Wyloguj</button>
+        </form>
         {% endif %}
     </header>
     <div class="container">
-        {% if request.user.is_authenticated %}
             {% block content %}
             {% endblock %}
-        {% endif %}
     </div>
     <footer class="footer mt-auto p-3 bg-dark">
         <p>twórcy: Kinga Smolarek, Przemek Błasiak, Marcel nic nie robiący Mikulski</p>

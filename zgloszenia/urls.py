@@ -1,13 +1,14 @@
+from django.shortcuts import redirect
 from django.urls import path
 
-from zgloszenia.views import home_view_k, create_report, user_login, logoutme, home_view_p, not_done_reports
+from zgloszenia.views import create_report, user_login, logoutme, home_view, not_done_reports
 
 urlpatterns = [
+    path('',lambda request: redirect('home')),
     path('addreport/', create_report, name='addreport'),
-    path('homep/addreport', create_report, name='addreport'),
-    #path('homek/', home_view_k, name='homek'),
-    path('homep/', home_view_p, name='homep'),
+    path('home/addreport', create_report, name='addreport'),
+    path('home/', home_view, name='home'),
     path('login/', user_login, name='login'),
     path('logoutme', logoutme, name="logoutme"),
-    path('homek/', not_done_reports, name='list'),
+    #path('homek/', not_done_reports, name='list'),
 ]

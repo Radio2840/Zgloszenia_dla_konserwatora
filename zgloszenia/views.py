@@ -15,12 +15,7 @@ def user_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    if request.user.groups.filter(name='Konserwatorzy').exists():
-                        return redirect('homek')
-                    if request.user.groups.filter(name='Pracownicy').exists():
-                        return redirect('homep')
-                    else:
-                        return HttpResponse("nie nalerzysz do żadnej grupy")
+                    return redirect('home')
                 else:
                     return HttpResponse('konto zablokowane')
             else:
@@ -35,7 +30,7 @@ def create_report(request):
         form = ReportForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('homep')
+            return redirect('home')
     else:
         form = ReportForm()
 
@@ -62,12 +57,11 @@ def logoutme(request):
 
     return render(request, 'login')
 
-
 @login_required
-def home_view_k(request):
-    return render(request, 'konserwator/home.html', {'home': 'home'})
-
-
-@login_required
-def home_view_p(request):
-    return render(request, 'pracownicy/home.html', {'home': 'home'})
+def home_view(request):
+    if request.user.groups.filter(name='Konserwatorzy').exists():
+        return render(request, 'konserwator/home.html', {'home': 'home'})
+    elif request.user.groups.filter(name='Pracownicy').exists():
+        return render(request, 'pracownicy/home.html', {'home': 'home'})
+    else:
+        return HttpResponse("nie nalerzysz do żadnej grupy")
