@@ -41,20 +41,22 @@ def create_report(request):
 
 
 @login_required
-def not_done_reports(request):
+def home_view(request):
+    if request.user.groups.filter(name='Konserwatorzy').exists():
+        reports_done = Report.objects.filter(status_of_the_report='done').order_by('-importance_of_the_report')
+        reports_not_done = Report.objects.filter(status_of_the_report='not_done').order_by('-importance_of_the_report')
+        reports_in_progress = Report.objects.filter(status_of_the_report='in_progress').order_by('-importance_of_the_report')
 
-    reports_done         = Report.objects.filter(status_of_the_report='done').order_by('-importance_of_the_report')
-    reports_not_done     = Report.objects.filter(status_of_the_report='not_done').order_by('-importance_of_the_report')
-    reports_in_progress  = Report.objects.filter(status_of_the_report='in_progress').order_by('-importance_of_the_report')
-
-    context = {
-        'done_reports':reports_done,
-        'not_done_reports': reports_not_done,
-        'in_progress_reports': reports_in_progress
-    }
-    
-    return render(request, 'conservators/home.html', context)
-
+        context = {
+            'done_reports': reports_done,
+            'not_done_reports': reports_not_done,
+            'in_progress_reports': reports_in_progress
+        }
+        return render(request, 'conservators/home.html', context)
+    elif request.user.groups.filter(name='Pracownicy').exists():
+        return render(request, 'employees/home.html', {'home': 'home'})
+    else:
+        return HttpResponse("nie nalerzysz do żadnej grupy")
 
 @login_required
 def logoutme(request):
@@ -65,12 +67,4 @@ def logoutme(request):
 
     return render(request, 'login')
 
-@login_required
-def home_view(request):
 
-    if request.user.groups.filter(name='Konserwatorzy').exists():
-        return render(request, 'conservators/home.html', {'home': 'home'})
-    elif request.user.groups.filter(name='Pracownicy').exists():
-        return render(request, 'employees/home.html', {'home': 'home'})
-    else:
-        return HttpResponse("nie nalerzysz do żadnej grupy")

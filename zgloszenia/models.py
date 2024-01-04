@@ -14,7 +14,7 @@ class Report(models.Model):
         (2, 'Średnia'),
         (3, 'Wysoka'),
     ]
-    
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=150, null=False)
     description = models.TextField(max_length=250)
     foto = models.ImageField(upload_to='fotos/', null=True, blank=True)
