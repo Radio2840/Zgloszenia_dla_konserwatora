@@ -53,7 +53,7 @@ def not_done_reports(request):
         'in_progress_reports': reports_in_progress
     }
     
-    return render(request, 'konserwator/home.html', context)
+    return render(request, 'conservators/home.html', context)
 
 
 @login_required
@@ -69,8 +69,8 @@ def logoutme(request):
 def home_view(request):
 
     if request.user.groups.filter(name='Konserwatorzy').exists():
-        return render(request, 'konserwator/home.html', {'home': 'home'})
+        return render(request, 'conservators/home.html', {'home': 'home'})
     elif request.user.groups.filter(name='Pracownicy').exists():
-        return render(request, 'pracownicy/home.html', {'home': 'home'})
+        return render(request, 'employees/home.html', {'home': 'home'})
     else:
         return HttpResponse("nie nalerzysz do żadnej grupy")
