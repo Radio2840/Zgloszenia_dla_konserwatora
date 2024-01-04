@@ -7,6 +7,7 @@ from zgloszenia.models import Report
 
 
 def user_login(request):
+
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -22,10 +23,12 @@ def user_login(request):
                 return HttpResponse('Niepoprawne dane logowania')
     else:
         form = LoginForm()
+
     return render(request, 'login.html', {'form': form})
 
 
 def create_report(request):
+
     if request.method == 'POST':
         form = ReportForm(request.POST, request.FILES)
         if form.is_valid():
@@ -39,18 +42,23 @@ def create_report(request):
 
 @login_required
 def not_done_reports(request):
-    not_done_reports = Report.objects.filter(status_of_the_report='not_done')
-    not_done_reports = not_done_reports.order_by('-importance_of_the_report')
-    in_progres_reports = Report.objects.filter(status_of_the_report='in_progress')
-    in_progres_reports = in_progres_reports.order_by('-importance_of_the_report')
-    done_reports = Report.objects.filter(status_of_the_report='done')
-    done_reports = done_reports.order_by('-importance_of_the_report')
-    context = {'not_done_reports': not_done_reports, 'in_progress_reports': in_progres_reports, 'done_reports':done_reports}
+
+    reports_done         = Report.objects.filter(status_of_the_report='done').order_by('-importance_of_the_report')
+    reports_not_done     = Report.objects.filter(status_of_the_report='not_done').order_by('-importance_of_the_report')
+    reports_in_progress  = Report.objects.filter(status_of_the_report='in_progress').order_by('-importance_of_the_report')
+
+    context = {
+        'done_reports':reports_done,
+        'not_done_reports': reports_not_done,
+        'in_progress_reports': reports_in_progress
+    }
+    
     return render(request, 'konserwator/home.html', context)
 
 
 @login_required
 def logoutme(request):
+
     if request.method == 'POST':
         logout(request)
         return redirect('login')
@@ -59,6 +67,7 @@ def logoutme(request):
 
 @login_required
 def home_view(request):
+
     if request.user.groups.filter(name='Konserwatorzy').exists():
         return render(request, 'konserwator/home.html', {'home': 'home'})
     elif request.user.groups.filter(name='Pracownicy').exists():
