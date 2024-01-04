@@ -6,6 +6,8 @@ from zgloszenia.forms import ReportForm, LoginForm
 from zgloszenia.models import Report
 
 
+# Login view for users
+
 def user_login(request):
 
     if request.method == 'POST':
@@ -26,6 +28,8 @@ def user_login(request):
 
     return render(request, 'login.html', {'form': form})
 
+# View to create reports by employees
+
 
 def create_report(request):
 
@@ -38,6 +42,8 @@ def create_report(request):
         form = ReportForm()
 
     return render(request, 'addreport.html', {'form': form})
+
+# View of the main panel for employees and conservators
 
 
 @login_required
@@ -58,6 +64,9 @@ def home_view(request):
     else:
         return HttpResponse("nie nalerzysz do żadnej grupy")
 
+
+# View to log out
+
 @login_required
 def logoutme(request):
 
@@ -66,5 +75,3 @@ def logoutme(request):
         return redirect('login')
 
     return render(request, 'login')
-
-
