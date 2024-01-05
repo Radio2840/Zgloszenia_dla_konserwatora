@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Zaloguj się</h2>
-<form method="post" action="{% url 'login' %}" class="form-group">
+<h2 class="text-center p-4">Zaloguj się</h2>
+<form method="post" action="{% url 'login' %}" class="form-group m-auto" style="width: min-content;">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit" class="btn btn-primary">Login</button>
 </form>
+
+{% if info %}
+  <p class="text-center text-warning p-3">{{ info }}</p>
+{% endif %}
+
 {% endblock %}

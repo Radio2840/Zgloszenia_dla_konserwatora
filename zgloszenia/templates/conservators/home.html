@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Strona główna</h2>
-  {% if user.is_authenticated %}
-    <div class="table">
+  <h2 class="text-center p-2">Strona główna</h2>
+    <div class="table table-dark">
         <div id="to_do" class="column">
             <h2>Do zrobienia</h2>
 
             {% for report in not_done_reports %}
-                <p class="report">{{ report.title }} - {{ report.status_of_the_report }} - {{ report.importance_of_the_report }}</p>
-               
+                <p class="report"><a href="../report?id={{ report.id }}" class=" waga{{report.importance_of_the_report}}"> {{ report.title }} </a></p>
             {% empty %}
                 <p>Nie ma żadnych zgłoszeń</p>
             {% endfor %}
@@ -18,8 +16,8 @@
         <div id="in_progress" class="column">
             <h2>W trakcie</h2>
         
-            {% for reportin in in_progress_reports %}
-                <p class="report">{{ reportin.title }} - {{ reportin.status_of_the_report }} - {{ reportin.importance_of_the_report }}</p>
+            {% for report in in_progress_reports %}
+                <p class="report"><a href="../report?id={{ report.id }}" class=" waga{{report.importance_of_the_report}}"> {{ report.title }} </a></p>
             {% empty %}
                 <p>Nie ma żadnych zgłoszeń</p>
             {% endfor %}
@@ -28,8 +26,8 @@
         <div id="done" class="column">
             <h2>Zakończone</h2>
             
-            {% for reportdone in done_reports %}
-                <p class="report">{{ reportdone.title }} - {{ reportdone.status_of_the_report }} - {{ reportdone.importance_of_the_report }}</p>
+            {% for report in done_reports %}
+                <p class="report"><a href="../report?id={{ report.id }}" class=" waga{{report.importance_of_the_report}}"> {{ report.title }} </a></p>
             {% empty %}
                 <p>Nie ma żadnych zgłoszeń</p>
             {% endfor %}
@@ -61,6 +59,7 @@
             if (event.button === 0) { 
                 holding_element = null;
             }
+            
         });
 
         function moveElement(element, x, y){
@@ -92,12 +91,15 @@
         
         .column p{
             background-color: rgba(0, 0, 0, 0.1);
-            padding: 0;
-            margin: 1px;
+            padding: 2px;
+            margin: 0px;
+            margin-top: 7px;
             width: 100%;
-
         }
+        .column a{background-color: transparent;}
+        a.waga1{color: #67ca53}
+        a.waga2{color: #caa453}
+        a.waga3{color: #ca5353}
 
     </style>
-  {% endif %}
 {% endblock %}

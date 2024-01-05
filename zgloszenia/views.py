@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from zgloszenia.forms import ReportForm, LoginForm
@@ -22,7 +22,7 @@ def user_login(request):
                 else:
                     return HttpResponse('konto zablokowane')
             else:
-                return HttpResponse('Niepoprawne dane logowania')
+                return render(request, 'login.html', {'form': form, 'info':'Niepoprawne dane logowania'})
     else:
         form = LoginForm()
 
@@ -30,7 +30,7 @@ def user_login(request):
 
 # View to create reports by employees
 
-
+@login_required
 def create_report(request):
 
     if request.method == 'POST':
@@ -62,10 +62,19 @@ def home_view(request):
     elif request.user.groups.filter(name='Pracownicy').exists():
         return render(request, 'employees/home.html', {'home': 'home'})
     else:
-        return HttpResponse("nie nalerzysz do żadnej grupy")
+        username=request.user
+        logout(request)
+        return render(request, 'login.html', {'form': LoginForm(), 'info':f"Użytkownik \"{username}\" nie należy do żadnej grupy"})
+
+def is_conservator(user):
+    return user.groups.filter(name='Konserwatorzy').exists()
+
+def is_worker(user):
+    return user.groups.filter(name='Pracownicy').exists()
 
 # Show report data
 @login_required
+@user_passes_test(is_conservator, login_url='home', redirect_field_name=None)
 def report_view(request):
     if request.user.groups.filter(name='Konserwatorzy').exists() or request.user.groups.filter(name='Pracownicy').exists():
         report = Report.objects.get(id=int(request.GET.get('id')))
@@ -74,7 +83,7 @@ def report_view(request):
         }
         return render(request, 'report.html', context)
     else:
-        return HttpResponse("nie nalerzysz do żadnej grupy")
+        return HttpResponse("nie należysz do żadnej grupy")
     
 @login_required
 def get_image(request):
