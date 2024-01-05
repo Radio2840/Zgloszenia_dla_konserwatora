@@ -1,37 +1,47 @@
 {% extends 'base.html' %}
 {% block content %}
+<h2 class="text-center p-3">{{report.title}}</h2>
+<div>
   <div class="report">
-    <div class="content">
-      <h2>{{report.title}}</h2>
-      <div class="context">
-        <div>
-          {{report.description}}
-        </div>
-        <div class="imgs">
-          <img src="fotos?id={{report.id}}" alt="">
-        </div>
-      </div>
+
+    <div class="desc">{{report.description}}</div>
+
+    <img src="fotos?id={{report.id}}" alt="">
+
+    <div class="info">
+      Waga zgłoszenia:
+      <b class="waga{{report.importance_of_the_report}}">{{report.get_importance_of_the_report_display}}</b>
     </div>
   </div>
-  <style>
-    .report{
-      background-color: rgba(0, 0, 0, 0.2);
-      height: 90vh;
-      align-self: center;
-    }
-    .report .content{
-      margin-left: 3vh;
-      margin-right: 3vh;
-    }
-    .report .context{
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
-    .context .imgs{
-      display: flex;
-      flex-direction: column;
-      text-align: center;
-    }
-  </style>
+  <a href="."><button type="button" class="btn btn-secondary">Powrót</button></a>
+</div>
+<style>
+  .report{
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin-bottom: 10px;
+    height: fit-content;
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: 35% 65%;
+    border-radius: 20px;
+    grid-template-areas: 'desc img' 'inf inf';
+  }
+  img{
+    grid-area: img;
+    width: calc(100% - 20px);
+    border-radius: 20px;
+  }
+  .desc{
+    overflow-wrap: break-word;
+    grid-area: desc;
+  }
+  .info{
+    grid-area: inf;
+  }
+  b.waga1{color: #67ca53}
+  b.waga2{color: #caa453}
+  b.waga3{color: #ca5353}
+
+</style>
 {% endblock %}

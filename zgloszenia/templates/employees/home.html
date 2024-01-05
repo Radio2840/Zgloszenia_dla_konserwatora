@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Strona główna</h2>
-  {% if user.is_authenticated %}
-    <a href="addreport">dodaj nowe zgłoszenie</a>
-  {% endif %}
+  <h2 class="text-center p-3">Strona główna</h2>
+  <h6 class="text-center"><a href="addreport">dodaj nowe zgłoszenie</a></h3>
+  
 {% endblock %}

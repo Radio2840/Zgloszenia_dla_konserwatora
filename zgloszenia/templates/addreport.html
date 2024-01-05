@@ -1,15 +1,17 @@
 {% extends "base.html" %}
-
-{% block title %}<h3>Dodaj zgłoszenie</h3>{% endblock %}
-
 {% block content %}
-<div class="container-fluid">
-    <form method="post" enctype="multipart/form-data" class="form-group">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Zgłoś</button>
-    </form>
-</div>
+<style> label{display: block;} </style>
+
+<h2 class="text-center p-4">Dodaj zgłoszenie</h2>
+
+<form method="post" enctype="multipart/form-data" class="form-group m-auto" style="width: min-content;">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <a href="."><button type="button" class="btn btn-secondary">Powrót</button></a>
+    <button type="submit" class="btn btn-primary">Zgłoś</button>
+</form>
+
 {% endblock %}
 
 

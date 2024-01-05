@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
+<style> label{display: block;} </style>
+
 <h2 class="text-center p-4">Zaloguj się</h2>
 <form method="post" action="{% url 'login' %}" class="form-group m-auto" style="width: min-content;">
   {% csrf_token %}
