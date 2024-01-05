@@ -64,6 +64,7 @@ def home_view(request):
     else:
         return HttpResponse("nie nalerzysz do żadnej grupy")
 
+# Show report data
 @login_required
 def report_view(request):
     if request.user.groups.filter(name='Konserwatorzy').exists() or request.user.groups.filter(name='Pracownicy').exists():
@@ -75,7 +76,10 @@ def report_view(request):
     else:
         return HttpResponse("nie nalerzysz do żadnej grupy")
     
-
+@login_required
+def get_image(request):
+    report = Report.objects.get(id=int(request.GET.get('id')))
+    return HttpResponse(report.foto.read(), content_type='image/jpeg')
 
 # View to log out
 

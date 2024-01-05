@@ -8,8 +8,8 @@
             <h2>Do zrobienia</h2>
 
             {% for report in not_done_reports %}
-                <p>{{ report.title }} - {{ report.status_of_the_report }} - {{ report.importance_of_the_report }}</p>
-                <a href="../report?id={{ report.id }}"> {{ report.title }} </a>
+                <p class="report">{{ report.title }} - {{ report.status_of_the_report }} - {{ report.importance_of_the_report }}</p>
+               
             {% empty %}
                 <p>Nie ma żadnych zgłoszeń</p>
             {% endfor %}
@@ -19,7 +19,7 @@
             <h2>W trakcie</h2>
         
             {% for reportin in in_progress_reports %}
-                <p>{{ reportin.title }} - {{ reportin.status_of_the_report }} - {{ reportin.importance_of_the_report }}</p>
+                <p class="report">{{ reportin.title }} - {{ reportin.status_of_the_report }} - {{ reportin.importance_of_the_report }}</p>
             {% empty %}
                 <p>Nie ma żadnych zgłoszeń</p>
             {% endfor %}
@@ -29,13 +29,49 @@
             <h2>Zakończone</h2>
             
             {% for reportdone in done_reports %}
-                <p>{{ reportdone.title }} - {{ reportdone.status_of_the_report }} - {{ reportdone.importance_of_the_report }}</p>
+                <p class="report">{{ reportdone.title }} - {{ reportdone.status_of_the_report }} - {{ reportdone.importance_of_the_report }}</p>
             {% empty %}
                 <p>Nie ma żadnych zgłoszeń</p>
             {% endfor %}
         
         </div>
     </div>
+    <script>
+
+        holding_element = null;
+        $(".report").toArray().forEach(element => {
+           element.addEventListener('mousedown', (function(element, ele){
+                    if(holding_element == null){
+                        holding_element = element.target;
+                        console.log(holding_element)
+                    }
+                })
+           )
+        });
+
+
+        document.addEventListener('mousemove', function(event) {
+            if(holding_element == null) return;
+            moveElement(holding_element, event.clientX, event.clientY)
+            event.preventDefault();
+        });
+
+        document.addEventListener('mouseup', function(event) {
+            console.log(0)
+            if (event.button === 0) { 
+                holding_element = null;
+            }
+        });
+
+        function moveElement(element, x, y){
+            element.style.width = element.offsetWidth + 'px'
+            element.style.height = element.offsetHeight + 'px'
+            element.style.position = "absolute";
+            element.style.left = x - (element.offsetWidth / 2) + 'px';
+            element.style.top = y - (element.offsetHeight / 2) + 'px';
+        }
+
+    </script>
     <style>
         .table{
             background-color: rgba(0, 0, 0, 0.2);
