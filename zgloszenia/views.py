@@ -64,6 +64,18 @@ def home_view(request):
     else:
         return HttpResponse("nie nalerzysz do żadnej grupy")
 
+@login_required
+def report_view(request):
+    if request.user.groups.filter(name='Konserwatorzy').exists() or request.user.groups.filter(name='Pracownicy').exists():
+        report = Report.objects.get(id=int(request.GET.get('id')))
+        context = {
+            'report':report
+        }
+        return render(request, 'report.html', context)
+    else:
+        return HttpResponse("nie nalerzysz do żadnej grupy")
+    
+
 
 # View to log out
 

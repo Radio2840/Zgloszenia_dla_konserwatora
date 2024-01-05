@@ -3,31 +3,65 @@
 {% block content %}
   <h2>Strona główna</h2>
   {% if user.is_authenticated %}
-      <h2>Do zrobienia</h2>
-    <ul>
-        {% for report in not_done_reports %}
-            <li>{{ report.title }} - {{ report.status_of_the_report }} - {{ report.importance_of_the_report }}</li>
-        {% empty %}
-            <p>Nie ma żadnych zgłoszeń</p>
-        {% endfor %}
-    </ul>
+    <div class="table">
+        <div id="to_do" class="column">
+            <h2>Do zrobienia</h2>
 
-    <h2>W trakcie</h2>
-    <ul>
-        {% for reportin in in_progress_reports %}
-            <li>{{ reportin.title }} - {{ reportin.status_of_the_report }} - {{ reportin.importance_of_the_report }}</li>
-        {% empty %}
-            <p>Nie ma żadnych zgłoszeń</p>
-        {% endfor %}
-    </ul>
+            {% for report in not_done_reports %}
+                <p>{{ report.title }} - {{ report.status_of_the_report }} - {{ report.importance_of_the_report }}</p>
+                <a href="../report?id={{ report.id }}"> {{ report.title }} </a>
+            {% empty %}
+                <p>Nie ma żadnych zgłoszeń</p>
+            {% endfor %}
 
-    <h2>Zakończone</h2>
-    <ul>
-        {% for reportdone in done_reports %}
-            <li>{{ reportdone.title }} - {{ reportdone.status_of_the_report }} - {{ reportdone.importance_of_the_report }}</li>
-        {% empty %}
-            <p>Nie ma żadnych zgłoszeń</p>
-        {% endfor %}
-    </ul>
+        </div>
+        <div id="in_progress" class="column">
+            <h2>W trakcie</h2>
+        
+            {% for reportin in in_progress_reports %}
+                <p>{{ reportin.title }} - {{ reportin.status_of_the_report }} - {{ reportin.importance_of_the_report }}</p>
+            {% empty %}
+                <p>Nie ma żadnych zgłoszeń</p>
+            {% endfor %}
+        
+        </div>
+        <div id="done" class="column">
+            <h2>Zakończone</h2>
+            
+            {% for reportdone in done_reports %}
+                <p>{{ reportdone.title }} - {{ reportdone.status_of_the_report }} - {{ reportdone.importance_of_the_report }}</p>
+            {% empty %}
+                <p>Nie ma żadnych zgłoszeń</p>
+            {% endfor %}
+        
+        </div>
+    </div>
+    <style>
+        .table{
+            background-color: rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .table .column{
+            width: 33.33%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px rgba(0, 0, 0, 0.2) solid;
+            border-right: 1px rgba(0, 0, 0, 0.2) solid;
+            margin: 0;
+        }
+        
+        .column p{
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 0;
+            margin: 1px;
+            width: 100%;
+
+        }
+
+    </style>
   {% endif %}
 {% endblock %}

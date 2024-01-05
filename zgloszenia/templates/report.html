@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% if user.is_authenticated %}
+  <div class="report">
+    <div class="content">
+      <h2>{{report.title}}</h2>
+      <div class="context">
+        <div>
+          {{report.description}}
+        </div>
+        <div class="imgs">
+          <a href="">zdj1</a>
+          <a href="">zdj2</a>
+          zrobje jakieś wyślietlanie zdj na onhover czy coś
+        </div>
+      </div>
+    </div>
+  </div>
+  <style>
+    .report{
+      background-color: rgba(0, 0, 0, 0.2);
+      height: 90vh;
+      align-self: center;
+    }
+    .report .content{
+      margin-left: 3vh;
+      margin-right: 3vh;
+    }
+    .report .context{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .context .imgs{
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+    }
+  </style>
+  {% endif %}
+{% endblock %}
