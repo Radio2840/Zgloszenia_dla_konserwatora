@@ -10,6 +10,7 @@ class LoginForm(forms.Form):
 
 # Form for adding reports to the database by employees and conservators
 
+
 class ReportForm(forms.ModelForm):
     class Meta:
         model = Report

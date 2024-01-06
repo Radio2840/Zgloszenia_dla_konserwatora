@@ -1,4 +1,4 @@
-
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -14,6 +14,7 @@ class Report(models.Model):
         (2, 'Średnia'),
         (3, 'Wysoka'),
     ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default='1')
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=150, null=False)
     description = models.TextField(max_length=250)

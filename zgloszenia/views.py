@@ -30,6 +30,7 @@ def user_login(request):
 
 # View to create reports by employees
 
+
 @login_required
 def create_report(request):
 
@@ -66,31 +67,37 @@ def home_view(request):
         logout(request)
         return render(request, 'login.html', {'form': LoginForm(), 'info':f"Użytkownik \"{username}\" nie należy do żadnej grupy"})
 
+
 def is_conservator(user):
     return user.groups.filter(name='Konserwatorzy').exists()
+
 
 def is_worker(user):
     return user.groups.filter(name='Pracownicy').exists()
 
 # Show report data
+
+
 @login_required
 @user_passes_test(is_conservator, login_url='home', redirect_field_name=None)
 def report_view(request):
     if request.user.groups.filter(name='Konserwatorzy').exists() or request.user.groups.filter(name='Pracownicy').exists():
         report = Report.objects.get(id=int(request.GET.get('id')))
         context = {
-            'report':report
+            'report': report
         }
         return render(request, 'report.html', context)
     else:
         return HttpResponse("nie należysz do żadnej grupy")
-    
+
+
 @login_required
 def get_image(request):
     report = Report.objects.get(id=int(request.GET.get('id')))
     return HttpResponse(report.foto.read(), content_type='image/jpeg')
 
 # View to log out
+
 
 @login_required
 def logoutme(request):
