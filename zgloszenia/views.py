@@ -79,7 +79,6 @@ def is_worker(user):
 
 
 @login_required
-@user_passes_test(is_conservator, login_url='home', redirect_field_name=None)
 def report_view(request):
     if request.user.groups.filter(name='Konserwatorzy').exists() or request.user.groups.filter(name='Pracownicy').exists():
         report = Report.objects.get(id=int(request.GET.get('id')))
