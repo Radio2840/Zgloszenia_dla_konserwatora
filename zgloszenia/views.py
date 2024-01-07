@@ -63,7 +63,7 @@ def home_view(request):
     elif request.user.groups.filter(name='Pracownicy').exists():
         return render(request, 'employees/home.html', {'home': 'home'})
     else:
-        username=request.user
+        username = request.user
         logout(request)
         return render(request, 'login.html', {'form': LoginForm(), 'info':f"Użytkownik \"{username}\" nie należy do żadnej grupy"})
 
@@ -89,6 +89,13 @@ def report_view(request):
         return render(request, 'report.html', context)
     else:
         return HttpResponse("nie należysz do żadnej grupy")
+
+
+@login_required
+def your_reports_view(request):
+    user_id = request.user.id
+    user_reports = Report.objects.filter(user_id=user_id)
+    return render(request, 'your_reports.html', {'user_reports': user_reports})
 
 
 @login_required
