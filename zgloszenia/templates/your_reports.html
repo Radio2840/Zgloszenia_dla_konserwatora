@@ -1,11 +1,34 @@
 {% extends 'base.html' %}
-
 {% block title %} Twoje zgłoszenia {% endblock %}
 
 {% block content %}
+<h2 class="text-center p-3">Twoje zgłoszenia</h2>
 
-            {% for report in user_reports %}
-                <p class="report"><a href="/zgloszenia/report?id={{ report.id }}"> {{ report.title }} </a></p>
-            {% endfor %}
+<div class="list">
+    {% for report in user_reports %}
+        <p class="report"><a class="waga{{report.importance_of_the_report}}" href="/zgloszenia/report?id={{ report.id }}"> {{ report.title }} </a>- {{report.get_status_of_the_report_display}}</p>
+    {% endfor %}
+</div>
+<a href="{% url 'home' %}"><button type="button" class="btn btn-secondary">Powrót</button></a>
 
+<style>
+    .container{
+        width: fit-content;
+        margin: 0px auto 0px auto;
+    }
+    .list{
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 10px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+    .report{
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 4px;
+        margin: 10px;
+    }
+    a.waga1{color: #67ca53}
+    a.waga2{color: #caa453}
+    a.waga3{color: #ca5353}
+</style>
 {% endblock %}

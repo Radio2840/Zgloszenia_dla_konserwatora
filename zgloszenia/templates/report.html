@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block title %}Zgłoszenie: {{report.title}}{% endblock %}
 {% block content %}
 <h2 class="text-center p-3">{{report.title}}</h2>
 <div>
@@ -10,10 +11,11 @@
 
     <div class="info">
       Waga zgłoszenia:
-      <b class="waga{{report.importance_of_the_report}}">{{report.get_importance_of_the_report_display}}</b>
+      <b class="waga{{report.importance_of_the_report}}">{{report.get_importance_of_the_report_display}}</b><br>
+      Dodane prez: <b>{{report.user}}</b>
     </div>
   </div>
-  <a href="."><button type="button" class="btn btn-secondary">Powrót</button></a>
+  <button type="button" class="btn btn-secondary" onclick="history.back()">Powrót</button>
 </div>
 <style>
   .report{

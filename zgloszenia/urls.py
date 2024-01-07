@@ -12,5 +12,5 @@ urlpatterns = [
     path('login/', user_login, name='login'),
     path('logoutme', logoutme, name="logoutme"),
     path('fotos', get_image, name='viewimg'),
-    path('your_reports', your_reports_view, name='your_reports_view'),
+    path('your_reports', your_reports_view, name='your_reports'),
 ]

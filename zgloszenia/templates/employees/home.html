@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
-
+{% block title %} Strona główna {% endblock %}
 {% block content %}
-  <h2 class="text-center p-3">Strona główna</h2>
-  <h3 class="text-center"><a href="addreport">dodaj nowe zgłoszenie</a></h3>
-  <a href="/zgloszenia/your_reports">twoje zgłoszenia</a>
+<h2 class="text-center p-3">Strona główna</h2>
+
+<div class="text-center p-4">
+  <h4 class="text-center">Witaj {{user}}!</h4>
+  <a href="{% url 'addreport' %}"><button type="button" class="btn btn-primary align-center m-1">Dodaj zgłoszenie</button></a><br>
+  <a href="{% url 'your_reports' %}"><button type="button" class="btn btn-primary align-center m-1">Twoje zgłoszenia</button></a>
+</div>
 {% endblock %}

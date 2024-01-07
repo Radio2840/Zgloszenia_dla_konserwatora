@@ -49,6 +49,7 @@ def create_report(request):
 
 @login_required
 def home_view(request):
+    # home konserwatora
     if request.user.groups.filter(name='Konserwatorzy').exists():
         reports_done = Report.objects.filter(status_of_the_report='done').order_by('-importance_of_the_report')
         reports_not_done = Report.objects.filter(status_of_the_report='not_done').order_by('-importance_of_the_report')
@@ -60,8 +61,14 @@ def home_view(request):
             'in_progress_reports': reports_in_progress
         }
         return render(request, 'conservators/home.html', context)
+    
+    # home pracownika
     elif request.user.groups.filter(name='Pracownicy').exists():
-        return render(request, 'employees/home.html', {'home': 'home'})
+        user_id = request.user.id
+        user_reports = Report.objects.filter(user_id=user_id)
+        return render(request, 'employees/home.html', {'home': 'home', 'user_reports': user_reports})
+    
+    # brak grupy
     else:
         username = request.user
         logout(request)
@@ -74,8 +81,6 @@ def is_conservator(user):
 
 def is_worker(user):
     return user.groups.filter(name='Pracownicy').exists()
-
-# Show report data
 
 
 @login_required
@@ -102,14 +107,8 @@ def get_image(request):
     report = Report.objects.get(id=int(request.GET.get('id')))
     return HttpResponse(report.foto.read(), content_type='image/jpeg')
 
-# View to log out
-
 
 @login_required
 def logoutme(request):
-
-    if request.method == 'POST':
-        logout(request)
-        return redirect('login')
-
-    return render(request, 'login')
+    logout(request)
+    return redirect('login')

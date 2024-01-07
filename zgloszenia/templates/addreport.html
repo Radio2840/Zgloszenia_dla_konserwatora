@@ -1,14 +1,15 @@
 {% extends "base.html" %}
+{% block title %} Dodaj Zgłoszenie {% endblock %}
 {% block content %}
 <style> label{display: block;} </style>
 
-<h2 class="text-center p-4">Dodaj zgłoszenie</h2>
+<h2 class="text-center p-3">Dodaj zgłoszenie</h2>
 
 <form method="post" enctype="multipart/form-data" class="form-group m-auto" style="width: min-content;">
     {% csrf_token %}
     {{ form.as_p }}
 
-    <a href="."><button type="button" class="btn btn-secondary">Powrót</button></a>
+    <a href="{% url 'home' %}"><button type="button" class="btn btn-secondary">Powrót</button></a>
     <button type="submit" class="btn btn-primary">Zgłoś</button>
 </form>
 
