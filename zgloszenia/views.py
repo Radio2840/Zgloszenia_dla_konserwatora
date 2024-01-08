@@ -7,7 +7,6 @@ from zgloszenia.models import Report
 
 
 # Login view for users
-
 def user_login(request):
 
     if request.method == 'POST':
@@ -29,8 +28,6 @@ def user_login(request):
     return render(request, 'login.html', {'form': form})
 
 # View to create reports by employees
-
-
 @login_required
 def create_report(request):
 
@@ -47,8 +44,6 @@ def create_report(request):
     return render(request, 'addreport.html', {'form': form})
 
 # View of the main panel for employees and conservators
-
-
 @login_required
 def home_view(request):
     # home konserwatora
@@ -84,7 +79,7 @@ def is_conservator(user):
 def is_worker(user):
     return user.groups.filter(name='Pracownicy').exists()
 
-
+# View the report details
 @login_required
 def report_view(request):
     if request.user.groups.filter(name='Konserwatorzy').exists() or request.user.groups.filter(name='Pracownicy').exists():
@@ -96,13 +91,13 @@ def report_view(request):
     else:
         return HttpResponse("nie należysz do żadnej grupy")
 
-
+# View list of report that have you made
 @login_required
 def your_reports_view(request):
     user_id = request.user.id
     user_reports = Report.objects.filter(user_id=user_id)
     return render(request, 'your_reports.html', {'user_reports': user_reports})
-
+# Changing the status of the report
 @login_required
 def change_report_status(request):
     if not is_conservator(request.user):
@@ -119,13 +114,13 @@ def change_report_status(request):
                 return HttpResponse({'error': 'Report not found'}, status=404)
         else:
             return HttpResponse({'error': 'Missing id or status'}, status=400)
-
+# Getting image
 @login_required
 def get_image(request):
     report = Report.objects.get(id=int(request.GET.get('id')))
     return HttpResponse(report.foto.read(), content_type='image/jpeg')
 
-
+# Log out
 @login_required
 def logoutme(request):
     logout(request)

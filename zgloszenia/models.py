@@ -17,7 +17,7 @@ class Report(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default='1')
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=150, null=False)
-    description = models.TextField(max_length=250)
+    description = models.TextField(max_length=500)
     foto = models.ImageField(upload_to='fotos/', null=True, blank=True)
     status_of_the_report = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_done')
     importance_of_the_report = models.IntegerField(choices=IMPORTANCE_CHOICES, default=1)
