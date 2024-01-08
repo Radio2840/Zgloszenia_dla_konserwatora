@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from django.urls import path
 
-from zgloszenia.views import create_report, user_login, logoutme, home_view, report_view, get_image, your_reports_view
+from zgloszenia.views import create_report, user_login, logoutme, home_view, report_view, get_image, your_reports_view, change_report_status
 
 urlpatterns = [
     path('', lambda request: redirect('home')),
@@ -13,4 +13,6 @@ urlpatterns = [
     path('logoutme', logoutme, name="logoutme"),
     path('fotos', get_image, name='viewimg'),
     path('your_reports', your_reports_view, name='your_reports'),
+    path('report/edit/status', change_report_status, name='report_edit_status'), 
+
 ]

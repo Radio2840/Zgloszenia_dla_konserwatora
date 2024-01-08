@@ -103,6 +103,22 @@ def your_reports_view(request):
     user_reports = Report.objects.filter(user_id=user_id)
     return render(request, 'your_reports.html', {'user_reports': user_reports})
 
+@login_required
+def change_report_status(request):
+    if not is_conservator(request.user):
+        return HttpResponse({'error': 'Unauthorized'}, status=403)
+    
+    if request.method == 'POST':
+        if request.POST.get('id') and request.POST.get('newStatus'):
+            try:
+                report = Report.objects.get(id=int(request.POST.get('id')))
+                report.status_of_the_report = request.POST.get('newStatus')
+                report.save()
+                return HttpResponse({'success': 'Report updated'})
+            except Report.DoesNotExist:
+                return HttpResponse({'error': 'Report not found'}, status=404)
+        else:
+            return HttpResponse({'error': 'Missing id or status'}, status=400)
 
 @login_required
 def get_image(request):

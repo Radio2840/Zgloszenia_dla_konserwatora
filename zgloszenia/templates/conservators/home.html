@@ -1,33 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
+  <div id="holder" style="position: absolute;margin: 0;left: 0;top: 0;"></div>
   <h2 class="text-center p-2">Strona główna</h2>
     <div class="table table-dark">
-        <div id="to_do" class="column">
+        <div id="not_done" class="column" onmouseover="over(this)">
             <h2>Do zrobienia</h2>
 
             {% for report in not_done_reports %}
-                <p class="report"><a href="../report?id={{ report.id }}" class=" waga{{report.importance_of_the_report}}"> {{ report.title }} </a></p>
+                <p class="report" report_id="{{ report.id }}"><a href="../report?id={{ report.id }}" class=" waga{{report.importance_of_the_report}}"> {{ report.title }} </a></p>
             {% empty %}
                 <p>Nie ma żadnych zgłoszeń</p>
             {% endfor %}
 
         </div>
-        <div id="in_progress" class="column">
+        <div id="in_progress" class="column" onmouseover="over(this)">
             <h2>W trakcie</h2>
         
             {% for report in in_progress_reports %}
-                <p class="report"><a href="../report?id={{ report.id }}" class=" waga{{report.importance_of_the_report}}"> {{ report.title }} </a></p>
+                <p class="report" report_id="{{ report.id }}"><a href="../report?id={{ report.id }}" class=" waga{{report.importance_of_the_report}}"> {{ report.title }} </a></p>
             {% empty %}
                 <p>Nie ma żadnych zgłoszeń</p>
             {% endfor %}
         
         </div>
-        <div id="done" class="column">
+        <div id="done" class="column" onmouseover="over(this)">
             <h2>Zakończone</h2>
             
             {% for report in done_reports %}
-                <p class="report"><a href="../report?id={{ report.id }}" class=" waga{{report.importance_of_the_report}}"> {{ report.title }} </a></p>
+                <p class="report" report_id="{{ report.id }}"><a href="../report?id={{ report.id }}" class=" waga{{report.importance_of_the_report}}"> {{ report.title }} </a></p>
             {% empty %}
                 <p>Nie ma żadnych zgłoszeń</p>
             {% endfor %}
@@ -37,16 +38,50 @@
     <script>
 
         holding_element = null;
+
+        column_started = null;
+        column_selected = null;
+
+        holder = document.getElementById("holder");
+
         $(".report").toArray().forEach(element => {
-           element.addEventListener('mousedown', (function(element, ele){
+           element.addEventListener('mousedown', (function(event){
                     if(holding_element == null){
-                        holding_element = element.target;
-                        console.log(holding_element)
+                        if(event.target.classList[0] != "report") return;
+
+                        column_started = event.target.parentElement;
+
+                        event.target.style.width  = event.target.offsetWidth + 'px'
+                        event.target.style.height = event.target.offsetHeight + 'px'
+
+                        holding_element = holder.appendChild(event.target);
+
+                        console.log(event)
+                        moveElement(holding_element, event.x, event.y)
                     }
                 })
            )
         });
 
+        function over(ele){
+            if(holding_element != null){
+                column_selected = ele;
+            }else{
+                column_selected = null;
+            }
+        }
+
+        /*$(".column").toArray().forEach(element => {
+           element.addEventListener('mouseover', (function(element){
+                    if(holding_element != null){
+                        column_selected = element.target;
+                        console.log(element.target.cl);
+                    }else{
+                        column_selected = null;
+                    }
+                })
+           )
+        });*/
 
         document.addEventListener('mousemove', function(event) {
             if(holding_element == null) return;
@@ -56,22 +91,45 @@
 
         document.addEventListener('mouseup', function(event) {
             console.log(0)
-            if (event.button === 0) { 
+            if (event.button === 0 && holding_element != null) { 
+                holding_element.style.position = "relative";
+                holding_element.style.left = null;
+                holding_element.style.top = null;
+                holding_element.style.width = null;
+                holding_element.style.height = null;
+                
+                column_selected.appendChild(holding_element);
+                
+                $.ajax({
+                    url: "../report/edit/status",
+                    type: "POST",
+                    headers: {
+                        "X-CSRFToken": document.cookie.match(/csrftoken=([^ ;]+)/)[1]
+                    },
+                    data: {
+                        "id": holding_element.getAttribute('report_id'),
+                        "newStatus": column_selected.id
+                    },
+                    error: function(error) {
+                        alert(error);
+                    }
+                });
+
+                console.log(holding_element.getAttribute('report_id'))
                 holding_element = null;
             }
-            
         });
 
         function moveElement(element, x, y){
-            element.style.width = element.offsetWidth + 'px'
-            element.style.height = element.offsetHeight + 'px'
+            if(element.parentElement.id != "holder") return;
             element.style.position = "absolute";
             element.style.left = x - (element.offsetWidth / 2) + 'px';
-            element.style.top = y - (element.offsetHeight / 2) + 'px';
+            element.style.top = y + 'px';
         }
 
     </script>
     <style>
+
         .table{
             background-color: rgba(0, 0, 0, 0.2);
             display: flex;
@@ -89,16 +147,19 @@
             margin: 0;
         }
         
-        .column p{
+        .report{
             cursor: move;
             cursor: grab;
+            text-align: center;
             background-color: rgba(0, 0, 0, 0.1);
             padding: 2px;
             margin: 0px;
             margin-top: 7px;
             width: 100%;
         }
-        .column a{background-color: transparent;}
+
+        .report a{background-color: transparent;}
+
         a.waga1{color: #67ca53}
         a.waga2{color: #caa453}
         a.waga3{color: #ca5353}
