@@ -97,7 +97,12 @@
                 holding_element.style.top = null;
                 holding_element.style.width = null;
                 holding_element.style.height = null;
-                
+
+                if(column_selected == null){
+                    column_started.appendChild(holding_element);
+                    return;
+                };
+
                 column_selected.appendChild(holding_element);
                 
                 $.ajax({
